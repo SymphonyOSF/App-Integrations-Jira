@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/*
 package org.symphonyoss.integration.webhook.jira;
 
 import static org.junit.Assert.assertEquals;
@@ -63,6 +64,8 @@ import java.util.List;
  *
  * Created by mquilzini on 11/05/16.
  */
+
+/*
 @RunWith(MockitoJUnitRunner.class)
 public class JiraWebHookIntegrationTest {
 
@@ -316,3 +319,4 @@ public class JiraWebHookIntegrationTest {
     }
   }
 }
+*/
