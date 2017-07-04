@@ -195,6 +195,50 @@
             </repositories>
         </profile>
 
+      <!-- TODO - move this profile on pom.xml of commons module -->
+      <profile>
+        <id>openshift-bundle</id>
+        <build>
+          <plugins>
+            <plugin>
+              <artifactId>maven-resources-plugin</artifactId>
+              <version>3.0.2</version>
+              <executions>
+                <execution>
+                  <id>copy-resources</id>
+                  <phase>validate</phase>
+                  <goals>
+                    <goal>copy-resources</goal>
+                  </goals>
+                  <configuration>
+                    <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                    <resources>
+                      <resource>
+                        <directory>${project.build.directory}</directory>
+                        <includes>
+                          <include>${project.artifactId}-${project.version}.jar</include>
+                        </includes>
+                      </resource>
+                      <resource>
+                        <directory>local-run</directory>
+                        <includes>
+                          <include>application.yaml.template</include>
+                        </includes>
+                      </resource>
+                      <resource>
+                        <directory>.</directory>
+                        <includes>
+                          <include>run.sh</include>
+                        </includes>
+                      </resource>
+                    </resources>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
     </profiles>
 
 </project>
