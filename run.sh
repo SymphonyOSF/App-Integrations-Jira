@@ -4,7 +4,7 @@
 # Run integrations locally or on Openshift
 #
 
-# Name of the spring-boot application to run, see src/main/resources/application-jira.yml
+# Name of the spring-boot application to run, see ./application.yml
 APP_ID=jira
 
 # Import environment variables
@@ -27,14 +27,10 @@ else
   LOG_BASEDIR=target
   JAVA_CMD_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,address=5000,suspend=n
   YAML_TEMPLATE=./target/bundle/application.yaml.template
-  mvn clean install -Prun
+  if [[ -z "$SKIP_MVN_BUILD" ]]; then
+    mvn clean install -Prun
+  fi
 fi
-
-# Inject environment variables in application.yaml
-# TODO - use environment vars syntax in application.yaml and skip this step
-echo "Generating application.yaml file"
-rm -rf application.yaml
-curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/inject-vars.sh | bash -s -- $YAML_TEMPLATE application.yaml
 
 # Cleanup tomcat folder from previous runs
 rm -rf tomcat ; mkdir tomcat
