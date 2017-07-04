@@ -55,5 +55,5 @@ after_success: "if [[ $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.gith
 script:
 # - "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ dev ]]; then mvn clean deploy -Pversioneye,openshift-bundle -DtransitiveDependencies=true --settings settings.xml ; fi"
 # - "if [[ \"$TRAVIS_PULL_REQUEST\" != \"false\" ]]; then mvn clean package -Pcobertura; fi"
-- "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ dev ]]; then mvn clean install -Popenshift-bundle -DtransitiveDependencies=true --settings settings.xml ; fi"
+- "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ dev ]]; then mvn clean install -Prun -DtransitiveDependencies=true --settings settings.xml ; fi"
 - "if [[ \"$TRAVIS_PULL_REQUEST\" != \"false\" ]]; then mvn clean package; fi"

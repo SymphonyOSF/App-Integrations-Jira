@@ -14,7 +14,7 @@ fi
 
 if [[ -d /opt/openshift ]]; then
   echo "run.sh - Running on Openshift"
-  INTEGRATION_JAR=./integration-jira-1.2.0-SNAPSHOT.jar
+  INTEGRATION_JAR=./integration.jar
   LOG_BASEDIR=.
   JAVA_CMD_OPTS="-Xmx350m"
   YAML_TEMPLATE=./application.yaml.template
@@ -23,11 +23,11 @@ if [[ -d /opt/openshift ]]; then
   cp -s /tmp/*.p12 ./certs
 else
   echo "run.sh - Running locally"
-  INTEGRATION_JAR=target/bundle/integration-jira-1.2.0-SNAPSHOT.jar
+  INTEGRATION_JAR=target/bundle/integration.jar
   LOG_BASEDIR=target
   JAVA_CMD_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,address=5000,suspend=n
   YAML_TEMPLATE=./target/bundle/application.yaml.template
-  mvn clean install -Prun,bundle
+  mvn clean install -Prun
 fi
 
 # Inject environment variables in application.yaml

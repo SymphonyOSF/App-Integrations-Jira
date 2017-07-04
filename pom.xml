@@ -197,7 +197,7 @@
 
       <!-- TODO - move this profile on pom.xml of commons module -->
       <profile>
-        <id>openshift-bundle</id>
+        <id>run</id>
         <build>
           <plugins>
             <plugin>
@@ -206,17 +206,20 @@
               <executions>
                 <execution>
                   <id>copy-resources</id>
-                  <phase>validate</phase>
+                  <phase>verify</phase>
                   <goals>
                     <goal>copy-resources</goal>
                   </goals>
                   <configuration>
+                    <nonFilteredFileExtensions>
+                      <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
                     <outputDirectory>${project.build.directory}/bundle</outputDirectory>
                     <resources>
                       <resource>
                         <directory>${project.build.directory}</directory>
                         <includes>
-                          <include>${project.artifactId}-${project.version}.jar</include>
+                          <include>integration.jar</include>
                         </includes>
                       </resource>
                       <resource>
@@ -240,5 +243,4 @@
         </build>
       </profile>
     </profiles>
-
 </project>
