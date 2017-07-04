@@ -50,7 +50,7 @@ env:
 #     build_command:   "mvn -Denv=dev -DsymphonySkipUnitTests=true install"
 #     branch_pattern: "dev"
 
-after_success: "if [[ $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
+after_success: "if [[ $TRAVIS_BRANCH =~ dev ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
 
 script:
 # - "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ dev ]]; then mvn clean deploy -Pversioneye,openshift-bundle -DtransitiveDependencies=true --settings settings.xml ; fi"
