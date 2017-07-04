@@ -223,14 +223,9 @@
                         </includes>
                       </resource>
                       <resource>
-                        <directory>local-run</directory>
-                        <includes>
-                          <include>application.yaml.template</include>
-                        </includes>
-                      </resource>
-                      <resource>
                         <directory>.</directory>
                         <includes>
+                          <include>application.yaml</include>
                           <include>run.sh</include>
                         </includes>
                       </resource>
