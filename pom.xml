@@ -194,48 +194,5 @@
                 </repository>
             </repositories>
         </profile>
-
-      <!-- TODO - move this profile on pom.xml of commons module -->
-      <profile>
-        <id>run</id>
-        <build>
-          <plugins>
-            <plugin>
-              <artifactId>maven-resources-plugin</artifactId>
-              <version>3.0.2</version>
-              <executions>
-                <execution>
-                  <id>copy-resources</id>
-                  <phase>verify</phase>
-                  <goals>
-                    <goal>copy-resources</goal>
-                  </goals>
-                  <configuration>
-                    <nonFilteredFileExtensions>
-                      <nonFilteredFileExtension>jar</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                    <outputDirectory>${project.build.directory}/bundle</outputDirectory>
-                    <resources>
-                      <resource>
-                        <directory>${project.build.directory}</directory>
-                        <includes>
-                          <include>integration.jar</include>
-                        </includes>
-                      </resource>
-                      <resource>
-                        <directory>.</directory>
-                        <includes>
-                          <include>application.yaml</include>
-                          <include>run.sh</include>
-                        </includes>
-                      </resource>
-                    </resources>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
     </profiles>
 </project>

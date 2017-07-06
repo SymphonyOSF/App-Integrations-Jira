@@ -4,9 +4,6 @@
 # Run integrations locally or on Openshift
 #
 
-# Name of the spring-boot application to run, see ./application.yml
-APP_ID=jira
-
 # Import environment variables
 if [ -f ./env.sh ]; then
   . ./env.sh
