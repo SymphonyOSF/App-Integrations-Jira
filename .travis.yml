@@ -48,7 +48,7 @@ addons:
     notification_email: "integrations-team@symphony.com"
     build_command_prepend: "mvn clean"
     build_command:   "mvn -Denv=dev -DsymphonySkipUnitTests=true install"
-    branch_pattern: "dev"
+    branch_pattern: "disabled"
 
 after_success: "if [[ $TRAVIS_BRANCH =~ dev ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
 
