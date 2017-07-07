@@ -194,7 +194,5 @@
                 </repository>
             </repositories>
         </profile>
-
     </profiles>
-
 </project>

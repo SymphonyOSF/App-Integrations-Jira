@@ -1,0 +1,6 @@
+applications:
+  jira:
+    state: PROVISIONED
+    keystore:
+      file: ${CERT_FILE}
+      password: ${CERT_PWD}

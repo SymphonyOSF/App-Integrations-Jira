@@ -1,0 +1,199 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: integration-jira-template
+parameters:
+- name: BOT_NAME
+  description: The Bot name
+  displayName: Bot Name
+  required: true
+  value: "jira"
+- name: HEALTHCHECK_PATH
+  description: The Healthcheck path
+  displayName: The Healthcheck path
+  required: true
+  value: "/"
+- name: S2I_STREAM_TAG
+  description: The S2I ImageStreamTag
+  displayName: S2I ImageStreamTag
+  required: true
+  value: "s2i-java-binary:latest"
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${BOT_NAME}
+    name: ${BOT_NAME}
+  spec: {}
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: ${BOT_NAME}
+    labels:
+      app: ${BOT_NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${BOT_NAME}:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      type: Binary
+      binary:
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: ${S2I_STREAM_TAG}
+    triggers: {}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${BOT_NAME}
+    name: ${BOT_NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${BOT_NAME}
+      deploymentconfig: ${BOT_NAME}
+    strategy:
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+      # TODO - may be useful for the future
+      # resources:
+      #   limits:
+      #     memory: "1024Mi"
+    template:
+      metadata:
+        labels:
+          app: ${BOT_NAME}
+          deploymentconfig: ${BOT_NAME}
+      spec:
+        containers:
+        - image: ${BOT_NAME}:latest
+          imagePullPolicy: Always
+          name: ${BOT_NAME}
+          ports:
+          - containerPort: 8186
+            protocol: TCP
+          # readinessProbe:
+          #   httpGet:
+          #     path: ${HEALTHCHECK_PATH}
+          #     port: 8186
+          #   initialDelaySeconds: 15
+          #   timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          env:
+          - name: POD_HOST
+            value: foundation-dev.symphony.com
+          - name: POD_PORT
+            value: "443"
+          - name: AGENT_HOST
+            value: foundation-dev.symphony.com
+          - name: AGENT_PORT
+            value: "443"
+          - name: KEY_MANAGER_HOST
+            value: foundation-dev.symphony.com
+          - name: KEY_MANAGER_PORT
+            value: "443"
+          - name: KEY_MANAGER_AUTH_HOST
+            value: foundation-dev-api.symphony.com
+          - name: KEY_MANAGER_AUTH_PORT
+            value: "443"
+          - name: POD_SESSION_MANAGER_HOST
+            value: foundation-dev-api.symphony.com
+          - name: POD_SESSION_MANAGER_PORT
+            value: "443"
+          - name: DOWNLOAD_HOST
+            valueFrom:
+              secretKeyRef:
+                name: symphony.foundation
+                key: download.host
+          - name: DOWNLOAD_PATH
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: certs.download.path
+          - name: DOWNLOAD_ITEMS
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: certs.download.items
+          - name: APP_ID
+            value: ${BOT_NAME}
+          - name: CERT_FILE
+            value: ${BOT_NAME}.p12
+          - name: CERT_PWD
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: cert.password
+          # - name: NGROK_TOKEN
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: ${BOT_NAME}.certs
+          #       key: ngrok.token
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${BOT_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${BOT_NAME}:latest
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: ${BOT_NAME}
+    name: ${BOT_NAME}
+  spec:
+    ports:
+    - name: healthcheck-tcp
+      port: 8186
+      protocol: TCP
+      targetPort: 8186
+    selector:
+      app: ${BOT_NAME}
+      deploymentconfig: ${BOT_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: ${BOT_NAME}
+    labels:
+      app: ${BOT_NAME}
+  spec:
+    to:
+      kind: Service
+      name: ${BOT_NAME}
+      weight: 100
+    port:
+      targetPort: healthcheck-tcp
+    wildcardPolicy: None
