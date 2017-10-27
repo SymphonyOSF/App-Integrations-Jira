@@ -205,3 +205,31 @@ To give a better visual information, JIRA's messages have specific flair color (
 |Incident Severity 3      |    Orange   |
 |||
 |Task                     |     Blue    |
+
+## Migration procedure from in-cloud Integration Bridge to on-premise Integration Bridge
+
+This section describes a migration procedure from an in-cloud Integration Bridge to an on-premise Integration Bridge
+to make sure the existing webhooks still working properly.
+
+There are 3 options to achieve this goal:
+
+- Update webhook URL
+- Setup a proxy server on-premise
+- NGINX rewrites URL's
+
+### Update Webhook URL
+The first option is to change each webhook URL to the new address. JIRA exposes a REST API to update webhooks. So, we can update existing webhooks using that API just changing the URL callback via migration script.
+
+### Setup an on-premise proxy server
+The second option is setting up an on-premise proxy server to perform a proxy pass to the correct address. Probably, you also need to configure your DNS server to mapping the legacy address to the new proxy server.
+
+### NGINX rewrites URL's
+The third option is to create a rewrite rule in the in-cloud NGINX server to return HTTP 301 that contains the new address in the 'Location' header. JIRA is able to follow this URL redirection and perform a new request to the correct address.
+
+Example:
+```
+location /integration {
+  rewrite ^/(.*) https://onprem-ib.symphony.com/$1 permanent;
+}
+```
+
