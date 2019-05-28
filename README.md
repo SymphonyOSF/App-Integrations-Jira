@@ -214,3 +214,18 @@ Please follow [these steps](https://github.com/SymphonyOSF/Apps#2-way-integratio
 
 ## Configure the application link
 After you have configured the Integration Bridge, it is time to tell your JIRA instance that you are ready to go! Please follow [these steps](https://integrations.symphony.com/v1.0/docs/jira-application-link-configuration#section-installation-and-configuration-on-jira) in order to do so.
+
+## Contributing
+
+1. Fork it (<https://github.com/symphonyoss/App-Integrations-Jira/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Read our [contribution guidelines](.github/CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
+4. Commit your changes (`git commit -am 'Add some fooBar'`)
+5. Push to the branch (`git push origin feature/fooBar`)
+6. Create a new Pull Request
+
+## License
+
+The code in this repository is distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+Copyright 2016-2019 Symphony LLC
